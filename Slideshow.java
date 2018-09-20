@@ -9,7 +9,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 public class Slideshow extends JFrame{
   Timer timer;
-  int secDisplay = 1; 
+  int secDisplay = 2; 
   Integer count = 1;
   String[] files = new String[]{"Images/bike1.jpg", "Images/bike2.jpg",
     "Images/bike3.jpg", "Images/blue1.jpg", "Images/blue2.jpg",
@@ -21,8 +21,10 @@ public class Slideshow extends JFrame{
   Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
   int screenHeight = (int)screenSize.getHeight();
   int screenWidth = (int)screenSize.getWidth();
-
-  public Slideshow(){
+  CSVWrite writer;
+  
+  public Slideshow(String name){
+    writer = new CSVWrite(name);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setExtendedState(Frame.MAXIMIZED_BOTH);
     setUndecorated(true);
@@ -30,6 +32,7 @@ public class Slideshow extends JFrame{
     img = null;
     image = new JPanel();
     image.setPreferredSize(new Dimension(screenWidth, screenHeight));
+    
     try{
       img = ImageIO.read(Slideshow.class.getResource(files[0]));
       scaled = img.getScaledInstance(screenWidth, screenHeight,Image.SCALE_SMOOTH);
@@ -37,13 +40,15 @@ public class Slideshow extends JFrame{
       image.add(temp);
       add(image, BorderLayout.CENTER);
       pack();
+      
     } catch (IOException e) { 
     } catch (NullPointerException e) {}
     timer = new Timer();
     for(int x = secDisplay; x <= (files.length * secDisplay); x =  x + secDisplay) {
       timer.schedule(new myTask(), x * 1000);
-      System.out.println(x);
     }
+    //timer.cancel();
+    //writer.closeCSV();
   }
 
   class myTask extends TimerTask {
@@ -63,17 +68,21 @@ public class Slideshow extends JFrame{
         image.add(temp);
         add(image, BorderLayout.CENTER);
         pack();
+        writer.write2CSV(files[count], "data");
         count++;
       } catch (IOException e) { 
       } catch (NullPointerException e) {}
     }
   }
 
-  public static void main(String[] args) {  
+  public static void main(String[] args) { 
+    if(args.length == 0) {
+      System.exit(0);
+    } 
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
-        new Slideshow().setVisible(true);
+        new Slideshow(args[0]).setVisible(true);
       }
     });
   }

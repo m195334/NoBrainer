@@ -34,8 +34,7 @@ public class mainGame {
         loadUser.setVisible(false);
         newUser.setVisible(false);
         String name = JOptionPane.showInputDialog("Name: ");
-        System.out.println(name);
-        new Slideshow().setVisible(true);    
+        new Slideshow(name).setVisible(true);    
         f.setVisible(false);
       }
     });
