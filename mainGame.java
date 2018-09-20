@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.*;
 
 public class mainGame {
   static class WindowDisposer extends WindowAdapter {
@@ -13,7 +14,7 @@ public class mainGame {
     WindowDisposer wd = new WindowDisposer();
     JFrame f = new JFrame();
     f.setLayout(null);
-    
+
     JButton loadUser = new JButton("Load Game");
     JButton newUser  = new JButton("New User");
     loadUser.setBounds(20 , 20 , 200 , 30);
@@ -22,7 +23,11 @@ public class mainGame {
 
     loadUser.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        System.out.println("load User");
+        String name = JOptionPane.showInputDialog("Profile to Load: ");
+        try{
+          new loadOldGame(name);
+        }
+        catch (IOException except) {}
         loadUser.setVisible(false);
         newUser.setVisible(false);
       }
@@ -30,7 +35,6 @@ public class mainGame {
 
     newUser.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        System.out.println("newUser");
         loadUser.setVisible(false);
         newUser.setVisible(false);
         String name = JOptionPane.showInputDialog("Name: ");
