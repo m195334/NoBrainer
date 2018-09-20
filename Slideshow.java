@@ -40,7 +40,7 @@ public class Slideshow extends JFrame{
       image.add(temp);
       add(image, BorderLayout.CENTER);
       pack();
-      
+      writer.write2CSV(files[0], "data");
     } catch (IOException e) { 
     } catch (NullPointerException e) {}
     timer = new Timer();
